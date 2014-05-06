@@ -15,7 +15,7 @@
  *
  */
 
-package jp.nita.nowplayingmusicextension;
+package jp.nita.NowPlayingMusicExtension;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;

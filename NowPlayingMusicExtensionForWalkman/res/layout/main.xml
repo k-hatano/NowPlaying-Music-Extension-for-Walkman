@@ -42,27 +42,45 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/tab1"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
 
-                    <TextView
-                        android:id="@+id/artist"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
+                    <EditText
+                        android:id="@+id/content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:ems="10"
+                        android:lines="3"
+                        android:gravity="top"
+                        android:inputType="textMultiLine" >
 
-                    <TextView
-                        android:id="@+id/album"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
+                        <requestFocus />
+                    </EditText>
+                    
+                    <Button
+                        android:id="@+id/apply_template"
+                        android:text="@string/apply_template"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true" />
+                    
+                    <Button
+                        android:id="@+id/send"
+                        android:text="@string/send"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true" />
 
-                    <TextView
-                        android:id="@+id/track"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                </RelativeLayout>
 
                 <LinearLayout
                     android:id="@+id/tab2"

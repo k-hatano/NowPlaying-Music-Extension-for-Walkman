@@ -6,4 +6,13 @@
     <!-- This text is shown in the lists of infinite music extension as a description of the extension -->
     <string name="description">This is an example extension</string>
     <string name="action_settings">Settings</string>
+    <string name="share_text">Share Text</string>
+    <string name="share_music_file">Share Music File</string>
+    <string name="settings">Settings</string>
+    <string name="song_information">Song Information</string>
+    <string name="send">Send</string>
+    <string name="twitter">Twitter</string>
+    <string name="facebook">Facebook</string>
+    <string name="other_app">Other app...</string>
+    <string name="apply_template">Apply Template</string>
 </resources>
