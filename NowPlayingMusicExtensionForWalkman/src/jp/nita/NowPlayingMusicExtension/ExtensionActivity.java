@@ -16,23 +16,42 @@
  */
 package jp.nita.NowPlayingMusicExtension;
 import android.R.drawable;
+import android.app.Activity;
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.TabHost.TabSpec;
 
 @SuppressWarnings("deprecation")
-public class ExtensionActivity extends TabActivity {
-
+public class ExtensionActivity extends TabActivity implements OnClickListener {
+	
+	public static final int PICKUP_SEND_TO_APP = 1;
+	
+	String template1;
+	
+	String title;
+	String artist;
+	String album;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        findViewById(R.id.send).setOnClickListener(this);
         
         TabHost tabHost = getTabHost();
 
@@ -70,21 +89,24 @@ public class ExtensionActivity extends TabActivity {
         if (trackCursor != null) {
             try {
                 if (trackCursor.moveToFirst()) {
+                	try{
+						title=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+					}catch (IllegalArgumentException e){
+						title="";
+					}
+					try{
+						artist=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+					}catch (IllegalArgumentException e){
+						artist="";
+					}
+					try{
+						album=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
+					}catch (IllegalArgumentException e){
+						album="";
+					}
 
-                    // And retrieve the wanted information
-                	/*
-                    String trackName = trackCursor.getString(trackCursor
-                            .getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
-                    String albumName = trackCursor.getString(trackCursor
-                            .getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
-                    String artistName = trackCursor.getString(trackCursor
-                            .getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
-
-                    ((TextView)findViewById(R.id.track)).setText(trackName);
-                    ((TextView)findViewById(R.id.album)).setText(albumName);
-                    ((TextView)findViewById(R.id.artist)).setText(artistName);
-                    */
-
+					updatePreferencesValues();
+					applyDefault();
                 }
             } finally {
                 trackCursor.close();
@@ -92,5 +114,69 @@ public class ExtensionActivity extends TabActivity {
         }
 
     }
+    
+    @Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.action_settings:
+	    	Intent intent=new Intent(this,SettingsActivity.class);
+	        startActivity(intent);
+	    	break;
+	    }
+	    return true;
+	}
+	
+	public void updatePreferencesValues(){
+		SharedPreferences pref=getSharedPreferences(SettingsActivity.PREF_KEY,Activity.MODE_PRIVATE);
+		template1=pref.getString(SettingsActivity.KEY_TEXT_1,getString(R.string.content_default));
+	}
+	
+	public void applyDefault(){
+		updatePreferencesValues();
+		String content=template1;
+		content=applyTemplate(content);
+		((TextView)findViewById(R.id.content)).setText(content);
+	}
+	
+	public String applyTemplate(String param){
+		param=param.replace("$t",title);
+		param=param.replace("$a",artist);
+		param=param.replace("$l",album);
+		//param=param.replace("$d",duration);
+		//param=param.replace("$c",composer);
+		//param=param.replace("$y",year);
+		return param;
+	}
+
+	@Override
+	public void onClick(View v) {
+		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+		if(v==(View)findViewById(R.id.send)){
+			try {
+				Intent intent = new Intent();
+				intent.setAction(Intent.ACTION_SEND);
+				intent.setType("text/plain");
+				intent.putExtra(Intent.EXTRA_TEXT, ((TextView)findViewById(R.id.content)).getText().toString());
+				startActivityForResult(intent,PICKUP_SEND_TO_APP);
+			} catch (Exception e) {
+				Log.d("ExampleExtensionActivity", "Error");
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		super.onActivityResult(requestCode,resultCode,data);
+		if(requestCode==PICKUP_SEND_TO_APP){
+			// if(quitAfterSharing) finish();
+		}
+	}
 
 }
