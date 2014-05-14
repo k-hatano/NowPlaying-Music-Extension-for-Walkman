@@ -44,9 +44,9 @@
 
                 <RelativeLayout
                     android:id="@+id/tab1"
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
 
                     <EditText
                         android:id="@+id/content"
@@ -56,44 +56,64 @@
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
                         android:ems="10"
-                        android:lines="3"
                         android:gravity="top"
-                        android:inputType="textMultiLine" >
+                        android:inputType="textMultiLine"
+                        android:lines="3" >
 
                         <requestFocus />
                     </EditText>
-                    
+
                     <Button
                         android:id="@+id/apply_template"
-                        android:text="@string/apply_template"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/content"
                         android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true" />
-                    
-                    <Button
-                        android:id="@+id/send"
-                        android:text="@string/send"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true" />
+                        android:layout_below="@+id/content"
+                        android:text="@string/apply_template" />
 
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/apply_template"
+                        android:stretchColumns="0,1" >
+
+                        <TableRow>
+
+                            <Spinner
+                                android:id="@+id/destination"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <Button
+                                android:id="@+id/send"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/send" />
+                        </TableRow>
+                    </TableLayout>
                 </RelativeLayout>
 
                 <LinearLayout
                     android:id="@+id/tab2"
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/tab3"
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <ListView
+                        android:id="@+id/information"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+                    </ListView>
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>

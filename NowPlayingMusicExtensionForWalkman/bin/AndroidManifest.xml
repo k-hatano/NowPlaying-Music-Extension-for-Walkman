@@ -29,7 +29,7 @@
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="9" />
+        android:targetSdkVersion="16" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -43,7 +43,7 @@
         <activity
             android:name="jp.nita.NowPlayingMusicExtension.ExtensionActivity"
             android:icon="@drawable/ic_launcher"
-            android:theme="@android:style/Theme.Holo" >
+            android:theme="@android:style/Theme.Holo" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="com.sonyericsson.media.infinite.ACTION_VIEW_INFINITE" />
                 <!-- Mime type should be set to audio/* for Music Extensions -->
@@ -63,7 +63,7 @@
 
         <activity
             android:name="jp.nita.NowPlayingMusicExtension.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings" android:launchMode="singleTask">
         </activity>
     </application>
 

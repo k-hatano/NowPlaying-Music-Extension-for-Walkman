@@ -15,6 +15,11 @@
  *
  */
 package jp.nita.NowPlayingMusicExtension;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import android.R.drawable;
 import android.app.Activity;
 import android.app.TabActivity;
@@ -25,12 +30,17 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.TabHost.TabSpec;
@@ -41,10 +51,16 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 	public static final int PICKUP_SEND_TO_APP = 1;
 	
 	String template1;
+	String template2;
+	String template3;
 	
 	String title;
 	String artist;
 	String album;
+	String duration;
+	String composer;
+	String year;
+	String trackno;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +98,19 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
         Cursor trackCursor = getContentResolver().query(
                 trackUri,
                 new String[] {
-                        MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
-                        MediaStore.Audio.Media.ALBUM
+                		MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
+						MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.DURATION,
+						MediaStore.Audio.Media.COMPOSER, MediaStore.Audio.Media.YEAR,
+						MediaStore.Audio.Media.TRACK
                 }, null, null, null);
 
         if (trackCursor != null) {
             try {
                 if (trackCursor.moveToFirst()) {
+                	Time time = new Time();
+					time.set(trackCursor.getLong(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)));
+					duration=time.format("%M:%S");
+                	
                 	try{
 						title=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
 					}catch (IllegalArgumentException e){
@@ -104,8 +126,37 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 					}catch (IllegalArgumentException e){
 						album="";
 					}
+					try{
+						composer=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.COMPOSER));
+					}finally{
+						if(composer==null) composer="";
+					}
+					try{
+						year=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.YEAR));
+					}finally{
+						if(year==null) year="";
+					}
+					try{
+						trackno=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TRACK));
+					}finally{
+						if(trackno==null) trackno="";
+						else{
+							int src;
+							try{
+								src=Integer.parseInt(trackno);
+							}catch(Exception e){
+								src=0;
+							}
+							int disc=src/1000;
+							int trk=src%1000;
+							if(disc>0) trackno=""+trk+" ("+getString(R.string.disc)+" "+disc+")";
+							else trackno=""+trk;
+						}
+					}
 
 					updatePreferencesValues();
+					updateDestinationSpinner();
+					updateInformationListView();
 					applyDefault();
                 }
             } finally {
@@ -135,6 +186,8 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 	public void updatePreferencesValues(){
 		SharedPreferences pref=getSharedPreferences(SettingsActivity.PREF_KEY,Activity.MODE_PRIVATE);
 		template1=pref.getString(SettingsActivity.KEY_TEXT_1,getString(R.string.content_default));
+		template2=pref.getString(SettingsActivity.KEY_TEXT_2,getString(R.string.content_default_2));
+		template3=pref.getString(SettingsActivity.KEY_TEXT_3,getString(R.string.content_default_3));
 	}
 	
 	public void applyDefault(){
@@ -177,6 +230,75 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 		if(requestCode==PICKUP_SEND_TO_APP){
 			// if(quitAfterSharing) finish();
 		}
+	}
+	
+	public void updateInformationListView(){
+		ListView items=(ListView)findViewById(R.id.information);
+		List<Map<String,String>> list=new ArrayList<Map<String,String>>();
+		{
+			Map<String,String> map;
+
+			map=new HashMap<String,String>();
+			map.put("key", getString(R.string.title));
+			map.put("value", title);
+			list.add(map);
+			
+			map=new HashMap<String,String>();
+			map.put("key", getString(R.string.artist));
+			map.put("value", artist);
+			list.add(map);
+			
+			map=new HashMap<String,String>();
+			map.put("key", getString(R.string.album));
+			map.put("value", album);
+			list.add(map);
+			
+			map=new HashMap<String,String>();
+			map.put("key", getString(R.string.duration));
+			map.put("value", duration);
+			list.add(map);
+			
+			map=new HashMap<String,String>();
+			map.put("key", getString(R.string.year));
+			map.put("value", year);
+			list.add(map);
+			
+			map=new HashMap<String,String>();
+			map.put("key", getString(R.string.track_no));
+			map.put("value", trackno);
+			list.add(map);
+			
+			map=new HashMap<String,String>();
+			map.put("key", getString(R.string.composer));
+			map.put("value", composer);
+			list.add(map);
+			
+		}
+		SimpleAdapter adapter
+		=new SimpleAdapter(this,list
+				,android.R.layout.simple_expandable_list_item_2,
+				new String[]{"key","value"},
+				new int[]{android.R.id.text1,android.R.id.text2});
+		items.setAdapter(adapter);
+
+		// items.setOnItemClickListener(this);
+	}
+	
+	public void updateDestinationSpinner(){
+		Spinner items=(Spinner)findViewById(R.id.destination);
+		List<String> list=new ArrayList<String>();
+		{
+			list.add(getString(R.string.twitter));
+			list.add(getString(R.string.facebook));
+			list.add(getString(R.string.other_app));
+		}
+		String array[]=list.toArray(new String[1]);
+		ArrayAdapter<String> adapter
+		=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,array);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		items.setAdapter(adapter);
+
+		// items.setOnItemClickListener(this);
 	}
 
 }

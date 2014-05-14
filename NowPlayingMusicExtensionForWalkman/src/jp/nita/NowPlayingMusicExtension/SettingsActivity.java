@@ -17,8 +17,12 @@ public class SettingsActivity extends Activity {
 
 	public static final String PREF_KEY = "NowPlayingMusicExtension";  
 	public static final String KEY_TEXT_1 = "templete";
+	public static final String KEY_TEXT_2 = "templete2";
+	public static final String KEY_TEXT_3 = "templete3";
 	
 	String template1;
+	String template2;
+	String template3;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,8 @@ public class SettingsActivity extends Activity {
 	public void updatePreferencesValues(){
 		SharedPreferences pref=getSharedPreferences(PREF_KEY,Activity.MODE_PRIVATE);
 		template1=pref.getString(KEY_TEXT_1,getString(R.string.content_default));
+		template2=pref.getString(KEY_TEXT_2,getString(R.string.content_default_2));
+		template3=pref.getString(KEY_TEXT_3,getString(R.string.content_default_3));
 	}
 	
 	public void updateSettingsListView(){
@@ -56,6 +62,16 @@ public class SettingsActivity extends Activity {
 			map=new HashMap<String,String>();
 			map.put("key", getString(R.string.template_1));
 			map.put("value", template1);
+			list.add(map);
+			
+			map=new HashMap<String,String>();
+			map.put("key", getString(R.string.template_2));
+			map.put("value", template2);
+			list.add(map);
+			
+			map=new HashMap<String,String>();
+			map.put("key", getString(R.string.template_3));
+			map.put("value", template3);
 			list.add(map);
 			
 		}
