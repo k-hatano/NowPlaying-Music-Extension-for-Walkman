@@ -22,8 +22,10 @@ import java.util.Map;
 
 import android.R.drawable;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -67,6 +69,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        findViewById(R.id.apply_template).setOnClickListener(this);
         findViewById(R.id.send).setOnClickListener(this);
         
         TabHost tabHost = getTabHost();
@@ -184,10 +187,10 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 	}
 	
 	public void updatePreferencesValues(){
-		SharedPreferences pref=getSharedPreferences(SettingsActivity.PREF_KEY,Activity.MODE_PRIVATE);
-		template1=pref.getString(SettingsActivity.KEY_TEXT_1,getString(R.string.content_default));
-		template2=pref.getString(SettingsActivity.KEY_TEXT_2,getString(R.string.content_default_2));
-		template3=pref.getString(SettingsActivity.KEY_TEXT_3,getString(R.string.content_default_3));
+		SharedPreferences pref=getSharedPreferences(Statics.PREF_KEY,Activity.MODE_PRIVATE);
+		template1=pref.getString(Statics.KEY_TEXT_1,getString(R.string.content_default));
+		template2=pref.getString(Statics.KEY_TEXT_2,getString(R.string.content_default_2));
+		template3=pref.getString(Statics.KEY_TEXT_3,getString(R.string.content_default_3));
 	}
 	
 	public void applyDefault(){
@@ -201,9 +204,9 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 		param=param.replace("$t",title);
 		param=param.replace("$a",artist);
 		param=param.replace("$l",album);
-		//param=param.replace("$d",duration);
+		param=param.replace("$d",duration);
 		//param=param.replace("$c",composer);
-		//param=param.replace("$y",year);
+		param=param.replace("$y",year);
 		return param;
 	}
 
@@ -221,6 +224,38 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 				Log.d("ExampleExtensionActivity", "Error");
 				e.printStackTrace();
 			}
+		}
+		if(v==(View)findViewById(R.id.apply_template)){
+			CharSequence list[]=new String[4];
+			updatePreferencesValues();
+			list[0]="1: "+applyTemplate(template1);
+			list[1]="2: "+applyTemplate(template2);
+			list[2]="3: "+applyTemplate(template3);
+			list[3]=getString(R.string.settings);
+			new AlertDialog.Builder(ExtensionActivity.this)
+			.setTitle(getString(R.string.apply_template))
+			.setItems(list,new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					switch(arg1){
+					case 0:
+						((TextView)findViewById(R.id.content)).setText(applyTemplate(template1));
+						break;
+					case 1:
+						((TextView)findViewById(R.id.content)).setText(applyTemplate(template2));
+						break;
+					case 2:
+						((TextView)findViewById(R.id.content)).setText(applyTemplate(template3));
+						break;
+					case 3:
+						Intent intent=new Intent(ExtensionActivity.this,SettingsActivity.class);
+						intent.setAction(Intent.ACTION_VIEW);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(intent);
+						break;
+					}
+				}
+			}).show();
 		}
 	}
 	
