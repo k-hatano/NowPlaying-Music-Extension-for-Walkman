@@ -10,6 +10,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +37,7 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 
-		findViewById(R.id.close).setOnClickListener(this);
+		findViewById(R.id.ok).setOnClickListener(this);
 	}
 
 	@Override
@@ -118,6 +119,7 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 			final EditText editText1 = new EditText(this);
 			editText1.setText(template1);
 			editText1.setLines(2);
+			editText1.setGravity(Gravity.TOP);
 			final LinearLayout layout = new LinearLayout(this);
 			layout.setOrientation(LinearLayout.VERTICAL);
 			layout.addView(explainView1);
@@ -148,6 +150,7 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 			final EditText editText2 = new EditText(this);
 			editText2.setText(template2);
 			editText2.setLines(2);
+			editText2.setGravity(Gravity.TOP);
 			final LinearLayout layout = new LinearLayout(this);
 			layout.setOrientation(LinearLayout.VERTICAL);
 			layout.addView(explainView2);
@@ -178,6 +181,7 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 			final EditText editText3 = new EditText(this);
 			editText3.setText(template3);
 			editText3.setLines(2);
+			editText3.setGravity(Gravity.TOP);
 			final LinearLayout layout = new LinearLayout(this);
 			layout.setOrientation(LinearLayout.VERTICAL);
 			layout.addView(explainView3);
@@ -250,7 +254,7 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 
 	@Override
 	public void onClick(View arg0) {
-		if(arg0==findViewById(R.id.close)){
+		if(arg0==findViewById(R.id.ok)){
 			finish();
 		}
 	}

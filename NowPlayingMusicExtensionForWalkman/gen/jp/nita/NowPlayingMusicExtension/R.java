@@ -25,8 +25,8 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_ok=0x7f080010;
-        public static final int action_settings=0x7f08000f;
+        public static final int action_ok=0x7f080011;
+        public static final int action_settings=0x7f080010;
         public static final int apply_template=0x7f080003;
         public static final int close=0x7f08000d;
         public static final int container=0x7f08000e;
@@ -35,6 +35,7 @@ public final class R {
         public static final int footer=0x7f080000;
         public static final int information=0x7f08000b;
         public static final int music_file_path=0x7f080008;
+        public static final int ok=0x7f08000f;
         public static final int send=0x7f080006;
         public static final int settings=0x7f08000c;
         public static final int share_music_file=0x7f080009;
@@ -85,6 +86,7 @@ public final class R {
         public static final int share_file=0x7f050004;
         public static final int share_music_file=0x7f050026;
         public static final int share_text=0x7f050003;
+        public static final int sharing_failed=0x7f050029;
         public static final int song_information=0x7f050006;
         public static final int template=0x7f050010;
         public static final int template_1=0x7f050011;

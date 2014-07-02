@@ -31,6 +31,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.format.Time;
 import android.util.Log;
@@ -39,16 +40,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 @SuppressWarnings("deprecation")
 public class ExtensionActivity extends TabActivity implements OnClickListener {
+	final static Handler handler = new Handler();
 	
 	public static final int PICKUP_SEND_TO_APP = 1;
 	
@@ -75,6 +79,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
         findViewById(R.id.send).setOnClickListener(this);
         findViewById(R.id.settings).setOnClickListener(this);
         findViewById(R.id.close).setOnClickListener(this);
+        findViewById(R.id.share_music_file).setOnClickListener(this);
         
         TabHost tabHost = getTabHost();
 
@@ -231,7 +236,8 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 				intent.putExtra(Intent.EXTRA_TEXT, ((TextView)findViewById(R.id.content)).getText().toString());
 				startActivityForResult(intent,PICKUP_SEND_TO_APP);
 			} catch (Exception e) {
-				Log.d("ExampleExtensionActivity", "Error");
+				showToast(this,getString(R.string.sharing_failed));
+				Log.d("ExtensionActivity", "Error");
 				e.printStackTrace();
 			}
 		}else if(v==findViewById(R.id.apply_template)){
@@ -272,6 +278,21 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 			startActivity(intent);
 		}else if(v==findViewById(R.id.close)){
 			finish();
+		}else if(v==findViewById(R.id.share_music_file)){
+			try {
+				Uri trackUri = getIntent().getData();
+				String ext=data.substring(data.lastIndexOf(".")+1);
+				String type=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
+				Intent intent = new Intent();
+				intent.setAction(Intent.ACTION_SEND);
+				intent.setType(type);
+				intent.putExtra(Intent.EXTRA_STREAM, trackUri);
+				startActivityForResult(intent,PICKUP_SEND_TO_APP);
+			} catch (Exception e) {
+				showToast(this,getString(R.string.sharing_failed));
+				Log.d("ExtensionActivity", "Error");
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -352,6 +373,19 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 		items.setAdapter(adapter);
 
 		// items.setOnItemClickListener(this);
+	}
+	
+	public static void showToast(final Context context,final String title){
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				handler.post(new Runnable() {
+					public void run() {
+						Toast.makeText(context, title, Toast.LENGTH_LONG).show();
+					}
+				});
+			}
+		}).start();
 	}
 
 }
