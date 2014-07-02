@@ -9,9 +9,17 @@
         android:id="@+id/settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/close"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" >
 
     </ListView>
+
+    <Button
+        android:id="@+id/close"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/close" />
 
 </RelativeLayout>

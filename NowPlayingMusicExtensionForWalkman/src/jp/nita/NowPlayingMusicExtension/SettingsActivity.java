@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -21,7 +22,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-public class SettingsActivity extends Activity implements OnItemClickListener {
+public class SettingsActivity extends Activity implements OnItemClickListener,OnClickListener {
 	
 	String template1;
 	String template2;
@@ -35,6 +36,7 @@ public class SettingsActivity extends Activity implements OnItemClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 
+		findViewById(R.id.close).setOnClickListener(this);
 	}
 
 	@Override
@@ -241,5 +243,12 @@ public class SettingsActivity extends Activity implements OnItemClickListener {
 		Statics.setPreferenceValue(this,Statics.KEY_TEXT_QUIT,quitAfterSharing);
 		updatePreferencesValues();
 		updateSettingsListView();
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		if(arg0==findViewById(R.id.close)){
+			finish();
+		}
 	}
 }

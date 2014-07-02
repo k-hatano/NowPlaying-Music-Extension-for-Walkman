@@ -73,6 +73,8 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
         
         findViewById(R.id.apply_template).setOnClickListener(this);
         findViewById(R.id.send).setOnClickListener(this);
+        findViewById(R.id.settings).setOnClickListener(this);
+        findViewById(R.id.close).setOnClickListener(this);
         
         TabHost tabHost = getTabHost();
 
@@ -221,7 +223,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-		if(v==(View)findViewById(R.id.send)){
+		if(v==findViewById(R.id.send)){
 			try {
 				Intent intent = new Intent();
 				intent.setAction(Intent.ACTION_SEND);
@@ -232,8 +234,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 				Log.d("ExampleExtensionActivity", "Error");
 				e.printStackTrace();
 			}
-		}
-		if(v==(View)findViewById(R.id.apply_template)){
+		}else if(v==findViewById(R.id.apply_template)){
 			CharSequence list[]=new String[4];
 			updatePreferencesValues();
 			list[0]="1: "+applyTemplate(template1);
@@ -264,6 +265,13 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 					}
 				}
 			}).show();
+		}else if(v==findViewById(R.id.settings)){
+			Intent intent=new Intent(ExtensionActivity.this,SettingsActivity.class);
+			intent.setAction(Intent.ACTION_VIEW);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
+		}else if(v==findViewById(R.id.close)){
+			finish();
 		}
 	}
 	

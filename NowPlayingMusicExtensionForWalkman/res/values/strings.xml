@@ -3,6 +3,7 @@
 
     <!-- The name of the application as a whole -->
     <string name="app_name">NowPlaying Music Extension</string>
+    <string name="description">Share playing song</string>
 
     <!-- This text is shown in the lists of infinite music extension as a description of the extension -->
     <string name="action_settings">Settings</string>
@@ -44,7 +45,5 @@
     <string name="share_music_file">Share Music File</string>
     <string name="share_album_artwork_file">Share Album Artwork File</string>
     <string name="quit_after_sharing">Quit After Sharing</string>
-    
-    <string name="description">Share playing song</string>
 
 </resources>
