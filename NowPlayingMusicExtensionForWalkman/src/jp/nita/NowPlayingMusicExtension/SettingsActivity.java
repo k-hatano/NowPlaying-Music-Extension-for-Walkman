@@ -26,6 +26,7 @@ public class SettingsActivity extends Activity implements OnItemClickListener {
 	String template1;
 	String template2;
 	String template3;
+	int quitAfterSharing;
 	
 	int position=0;
 	
@@ -56,6 +57,7 @@ public class SettingsActivity extends Activity implements OnItemClickListener {
 		template1=pref.getString(Statics.KEY_TEXT_1,getString(R.string.content_default));
 		template2=pref.getString(Statics.KEY_TEXT_2,getString(R.string.content_default_2));
 		template3=pref.getString(Statics.KEY_TEXT_3,getString(R.string.content_default_3));
+		quitAfterSharing=pref.getInt(Statics.KEY_TEXT_QUIT,0);
 	}
 	
 	public void updateSettingsListView(){
@@ -77,6 +79,11 @@ public class SettingsActivity extends Activity implements OnItemClickListener {
 			map=new HashMap<String,String>();
 			map.put("key", getString(R.string.template_3));
 			map.put("value", template3);
+			list.add(map);
+			
+			map=new HashMap<String,String>();
+			map.put("key", getString(R.string.quit_after_sharing));
+			map.put("value", Statics.getOnOrOffString(this, quitAfterSharing));
 			list.add(map);
 			
 		}
@@ -189,6 +196,21 @@ public class SettingsActivity extends Activity implements OnItemClickListener {
 			})
 			.show();
 			break;
+		}case 3:{
+			CharSequence list[]=new String[2];
+			list[0]=getString(R.string.off);
+			list[1]=getString(R.string.on);
+			new AlertDialog.Builder(SettingsActivity.this)
+			.setTitle(getString(R.string.quit_after_sharing))
+			.setSingleChoiceItems(list,quitAfterSharing,new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					setQuitAfterSharing(arg1);
+					arg0.dismiss();
+					((ListView)findViewById(R.id.settings)).setSelection(position);
+				}
+			}).show();
+			break;
 		}
 		}
 	}
@@ -210,6 +232,13 @@ public class SettingsActivity extends Activity implements OnItemClickListener {
 	public void setTemplate3(String tmp3){
 		template3=tmp3;
 		Statics.setPreferenceString(this,Statics.KEY_TEXT_3,template3);
+		updatePreferencesValues();
+		updateSettingsListView();
+	}
+	
+	public void setQuitAfterSharing(int qas){
+		quitAfterSharing=qas;
+		Statics.setPreferenceValue(this,Statics.KEY_TEXT_QUIT,quitAfterSharing);
 		updatePreferencesValues();
 		updateSettingsListView();
 	}

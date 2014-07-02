@@ -43,6 +43,7 @@
     <string name="album_artwork_file">Album Artwork File</string>
     <string name="share_music_file">Share Music File</string>
     <string name="share_album_artwork_file">Share Album Artwork File</string>
+    <string name="quit_after_sharing">Quit After Sharing</string>
     
     <string name="description">Share playing song</string>
 

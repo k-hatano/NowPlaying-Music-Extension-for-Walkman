@@ -55,6 +55,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 	String template1;
 	String template2;
 	String template3;
+	int quitAfterSharing;
 	
 	String title;
 	String artist;
@@ -197,6 +198,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 		template1=pref.getString(Statics.KEY_TEXT_1,getString(R.string.content_default));
 		template2=pref.getString(Statics.KEY_TEXT_2,getString(R.string.content_default_2));
 		template3=pref.getString(Statics.KEY_TEXT_3,getString(R.string.content_default_3));
+		quitAfterSharing=pref.getInt(Statics.KEY_TEXT_QUIT,0);
 	}
 	
 	public void applyDefault(){
@@ -269,7 +271,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		super.onActivityResult(requestCode,resultCode,data);
 		if(requestCode==PICKUP_SEND_TO_APP){
-			// if(quitAfterSharing) finish();
+			if(quitAfterSharing>0) finish();
 		}
 	}
 	

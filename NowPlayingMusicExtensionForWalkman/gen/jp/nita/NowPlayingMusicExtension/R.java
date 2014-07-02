@@ -67,7 +67,7 @@ public final class R {
         public static final int content_default=0x7f05000c;
         public static final int content_default_2=0x7f05000d;
         public static final int content_default_3=0x7f05000e;
-        public static final int description=0x7f050027;
+        public static final int description=0x7f050028;
         public static final int disc=0x7f05001d;
         public static final int duration=0x7f05001c;
         public static final int facebook=0x7f050009;
@@ -77,6 +77,7 @@ public final class R {
         public static final int ok=0x7f050020;
         public static final int on=0x7f05001e;
         public static final int other_app=0x7f05000a;
+        public static final int quit_after_sharing=0x7f050027;
         public static final int send=0x7f050006;
         public static final int settings=0x7f050004;
         public static final int share_album_artwork_file=0x7f050026;
