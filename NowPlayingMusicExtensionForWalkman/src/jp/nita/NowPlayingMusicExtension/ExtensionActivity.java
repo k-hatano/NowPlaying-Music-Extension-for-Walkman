@@ -63,6 +63,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 	String composer;
 	String year;
 	String trackno;
+	String data;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +80,8 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 		tab1.setContent(R.id.tab1);
 		tabHost.addTab(tab1);
 
-		TabSpec tab2 = tabHost.newTabSpec(getString(R.string.share_music_file));
-		tab2.setIndicator(getString(R.string.share_music_file),getResources().getDrawable(drawable.ic_menu_upload));
+		TabSpec tab2 = tabHost.newTabSpec(getString(R.string.share_file));
+		tab2.setIndicator(getString(R.string.share_file),getResources().getDrawable(drawable.ic_menu_upload));
 		tab2.setContent(R.id.tab2);
 		tabHost.addTab(tab2);
 
@@ -104,7 +105,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
                 		MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
 						MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.DURATION,
 						MediaStore.Audio.Media.COMPOSER, MediaStore.Audio.Media.YEAR,
-						MediaStore.Audio.Media.TRACK
+						MediaStore.Audio.Media.TRACK,	MediaStore.Audio.Media.DATA
                 }, null, null, null);
 
         if (trackCursor != null) {
@@ -131,23 +132,23 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 					}
 					try{
 						composer=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.COMPOSER));
-					}finally{
+					}catch (IllegalArgumentException e){
 						if(composer==null) composer="";
 					}
 					try{
 						year=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.YEAR));
-					}finally{
+					}catch (IllegalArgumentException e){
 						if(year==null) year="";
 					}
 					try{
 						trackno=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TRACK));
-					}finally{
+					}catch (IllegalArgumentException e){
 						if(trackno==null) trackno="";
 						else{
 							int src;
 							try{
 								src=Integer.parseInt(trackno);
-							}catch(Exception e){
+							}catch(Exception e2){
 								src=0;
 							}
 							int disc=src/1000;
@@ -155,6 +156,11 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 							if(disc>0) trackno=""+trk+" ("+getString(R.string.disc)+" "+disc+")";
 							else trackno=""+trk;
 						}
+					}
+					try{
+						data=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+					}catch (IllegalArgumentException e){
+						if(data==null) data="";
 					}
 
 					updatePreferencesValues();
@@ -315,6 +321,8 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 				new String[]{"key","value"},
 				new int[]{android.R.id.text1,android.R.id.text2});
 		items.setAdapter(adapter);
+		
+		((TextView)findViewById(R.id.music_file_path)).setText(data);
 
 		// items.setOnItemClickListener(this);
 	}

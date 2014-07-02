@@ -131,6 +131,64 @@ public class SettingsActivity extends Activity implements OnItemClickListener {
 			})
 			.show();
 			break;
+		}case 1:{
+			final TextView explainView2 = new TextView(this);
+			explainView2.setText(getString(R.string.template_explain));
+			explainView2.setTextAppearance(this,android.R.style.TextAppearance_Inverse);
+			final EditText editText2 = new EditText(this);
+			editText2.setText(template2);
+			final LinearLayout layout = new LinearLayout(this);
+			layout.setOrientation(LinearLayout.VERTICAL);
+			layout.addView(explainView2);
+			layout.addView(editText2);
+			layout.setPadding(8,8,8,8);
+			new AlertDialog.Builder(SettingsActivity.this)
+			.setTitle(getString(R.string.template_2))
+			.setView(layout)
+			.setPositiveButton(getString(R.string.ok),new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					setTemplate2(editText2.getText().toString());
+					((ListView)findViewById(R.id.settings)).setSelection(position);
+				}
+			})
+			.setNegativeButton(getString(R.string.cancel),new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					((ListView)findViewById(R.id.settings)).setSelection(position);
+				}
+			})
+			.show();
+			break;
+		}case 2:{
+			final TextView explainView3 = new TextView(this);
+			explainView3.setText(getString(R.string.template_explain));
+			explainView3.setTextAppearance(this,android.R.style.TextAppearance_Inverse);
+			final EditText editText3 = new EditText(this);
+			editText3.setText(template3);
+			final LinearLayout layout = new LinearLayout(this);
+			layout.setOrientation(LinearLayout.VERTICAL);
+			layout.addView(explainView3);
+			layout.addView(editText3);
+			layout.setPadding(8,8,8,8);
+			new AlertDialog.Builder(SettingsActivity.this)
+			.setTitle(getString(R.string.template_3))
+			.setView(layout)
+			.setPositiveButton(getString(R.string.ok),new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					setTemplate3(editText3.getText().toString());
+					((ListView)findViewById(R.id.settings)).setSelection(position);
+				}
+			})
+			.setNegativeButton(getString(R.string.cancel),new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					((ListView)findViewById(R.id.settings)).setSelection(position);
+				}
+			})
+			.show();
+			break;
 		}
 		}
 	}
@@ -138,6 +196,20 @@ public class SettingsActivity extends Activity implements OnItemClickListener {
 	public void setTemplate1(String tmp1){
 		template1=tmp1;
 		Statics.setPreferenceString(this,Statics.KEY_TEXT_1,template1);
+		updatePreferencesValues();
+		updateSettingsListView();
+	}
+	
+	public void setTemplate2(String tmp2){
+		template2=tmp2;
+		Statics.setPreferenceString(this,Statics.KEY_TEXT_2,template2);
+		updatePreferencesValues();
+		updateSettingsListView();
+	}
+	
+	public void setTemplate3(String tmp3){
+		template3=tmp3;
+		Statics.setPreferenceString(this,Statics.KEY_TEXT_3,template3);
 		updatePreferencesValues();
 		updateSettingsListView();
 	}

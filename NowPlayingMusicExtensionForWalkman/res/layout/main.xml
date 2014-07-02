@@ -16,7 +16,7 @@
  *
  *
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
@@ -73,6 +73,7 @@
                         android:text="@string/apply_template" />
 
                     <TableLayout
+                        android:id="@+id/tableLayout1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
@@ -101,6 +102,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/music_file"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                    <TextView
+                        android:id="@+id/music_file_path"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:id="@+id/share_music_file"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/share_music_file" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -119,4 +137,27 @@
         </LinearLayout>
     </TabHost>
 
-</LinearLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:stretchColumns="0,1" >
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings" />
+
+            <Button
+                android:id="@+id/close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/close" />
+        </TableRow>
+    </TableLayout>
+
+</RelativeLayout>
