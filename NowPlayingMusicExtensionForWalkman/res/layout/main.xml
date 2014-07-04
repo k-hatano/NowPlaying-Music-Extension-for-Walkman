@@ -59,7 +59,7 @@
                         android:ems="10"
                         android:gravity="top"
                         android:inputType="textMultiLine"
-                        android:lines="3" >
+                        android:lines="4" >
 
                         <requestFocus />
                     </EditText>
@@ -121,6 +121,23 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/share_music_file" />
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/album_artwork_file"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                    <TextView
+                        android:id="@+id/album_artwork_file_path"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <Button
+                        android:id="@+id/share_album_artwork_file"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/share_album_artwork_file" />
                 </LinearLayout>
 
                 <LinearLayout

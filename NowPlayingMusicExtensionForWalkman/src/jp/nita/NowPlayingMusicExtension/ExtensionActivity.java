@@ -33,6 +33,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.ClipboardManager;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
@@ -41,6 +42,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -51,7 +54,7 @@ import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 @SuppressWarnings("deprecation")
-public class ExtensionActivity extends TabActivity implements OnClickListener {
+public class ExtensionActivity extends TabActivity implements OnClickListener, OnItemClickListener {
 	final static Handler handler = new Handler();
 	
 	public static final int PICKUP_SEND_TO_APP = 1;
@@ -69,6 +72,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 	String year;
 	String trackno;
 	String data;
+	String albumArtwork;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
         findViewById(R.id.settings).setOnClickListener(this);
         findViewById(R.id.close).setOnClickListener(this);
         findViewById(R.id.share_music_file).setOnClickListener(this);
+        findViewById(R.id.share_album_artwork_file).setOnClickListener(this);
         
         TabHost tabHost = getTabHost();
 
@@ -113,7 +118,8 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
                 		MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
 						MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.DURATION,
 						MediaStore.Audio.Media.COMPOSER, MediaStore.Audio.Media.YEAR,
-						MediaStore.Audio.Media.TRACK,	MediaStore.Audio.Media.DATA
+						MediaStore.Audio.Media.TRACK,	MediaStore.Audio.Media.DATA,
+						MediaStore.Audio.Media.ALBUM_ID
                 }, null, null, null);
 
         if (trackCursor != null) {
@@ -152,23 +158,32 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 						trackno=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TRACK));
 					}catch (IllegalArgumentException e){
 						if(trackno==null) trackno="";
-						else{
-							int src;
-							try{
-								src=Integer.parseInt(trackno);
-							}catch(Exception e2){
-								src=0;
-							}
-							int disc=src/1000;
-							int trk=src%1000;
-							if(disc>0) trackno=""+trk+" ("+getString(R.string.disc)+" "+disc+")";
-							else trackno=""+trk;
-						}
 					}
+					int src;
+					try{
+						src=Integer.parseInt(trackno);
+					}catch(Exception e2){
+						src=0;
+					}
+					int disc=src/1000;
+					int trk=src%1000;
+					if(disc>0) trackno=""+trk+" ("+getString(R.string.disc)+" "+disc+")";
+					else trackno=""+trk;
 					try{
 						data=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
 					}catch (IllegalArgumentException e){
 						if(data==null) data="";
+					}
+					
+					Cursor albumCursor = getContentResolver().query(
+							MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+							null, MediaStore.Audio.Albums._ID + "=?", 
+							new String[]{ trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)) }, null);
+
+					if(albumCursor!=null && albumCursor.getCount()>0){
+						albumCursor.moveToFirst();
+						int albumArtworkIndex = albumCursor.getColumnIndexOrThrow(MediaStore.Audio.Albums.ALBUM_ART);
+						albumArtwork = albumCursor.getString(albumArtworkIndex);
 					}
 
 					updatePreferencesValues();
@@ -293,6 +308,21 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 				Log.d("ExtensionActivity", "Error");
 				e.printStackTrace();
 			}
+		}else if(v==findViewById(R.id.share_album_artwork_file)){
+			try {
+				Uri trackUri = Uri.parse(albumArtwork);
+				//String ext=albumArtwork.substring(albumArtwork.lastIndexOf(".")+1);
+				//String type=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
+				Intent intent = new Intent();
+				intent.setAction(Intent.ACTION_SEND);
+				//intent.setType(type);
+				intent.putExtra(Intent.EXTRA_STREAM, trackUri);
+				startActivityForResult(intent,PICKUP_SEND_TO_APP);
+			} catch (Exception e) {
+				showToast(this,getString(R.string.sharing_failed));
+				Log.d("ExtensionActivity", "Error");
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -354,8 +384,9 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 		items.setAdapter(adapter);
 		
 		((TextView)findViewById(R.id.music_file_path)).setText(data);
+		((TextView)findViewById(R.id.album_artwork_file_path)).setText(albumArtwork);
 
-		// items.setOnItemClickListener(this);
+		items.setOnItemClickListener(this);
 	}
 	
 	public void updateDestinationSpinner(){
@@ -386,6 +417,56 @@ public class ExtensionActivity extends TabActivity implements OnClickListener {
 				});
 			}
 		}).start();
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		if(arg0==findViewById(R.id.information)){
+			String obj=null;
+			switch(arg2){
+			case 0:
+				obj=title;
+				break;
+			case 1:
+				obj=artist;
+				break;
+			case 2:
+				obj=album;
+				break;
+			case 3:
+				obj=duration;
+				break;
+			case 4:
+				obj=year;
+				break;
+			case 5:
+				obj=trackno;
+				break;
+			case 6:
+				obj=composer;
+				break;
+			}
+			if(obj==null||obj.equals("")) return;
+			CharSequence list[]=new String[2];
+			list[0]=getString(R.string.copy);
+			list[1]=getString(R.string.search);
+			final String string=obj;
+			new AlertDialog.Builder(ExtensionActivity.this)
+			.setTitle(obj)
+			.setItems(list,new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					switch(arg1){
+					case 0:{
+						ClipboardManager clipboard=(ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+						clipboard.setText(string);
+						ExtensionActivity.showToast(ExtensionActivity.this, ""+getString(R.string.copied)+" "+string);
+						break;
+					}
+					}
+				}
+			}).show();
+		}
 	}
 
 }

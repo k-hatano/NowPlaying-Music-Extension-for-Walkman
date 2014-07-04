@@ -115,10 +115,10 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 		case 0:{
 			final TextView explainView1 = new TextView(this);
 			explainView1.setText(getString(R.string.template_explain));
-			explainView1.setTextAppearance(this,android.R.style.TextAppearance);
+			explainView1.setTextAppearance(this,android.R.style.TextAppearance_Small);
 			final EditText editText1 = new EditText(this);
 			editText1.setText(template1);
-			editText1.setLines(2);
+			editText1.setLines(3);
 			editText1.setGravity(Gravity.TOP);
 			final LinearLayout layout = new LinearLayout(this);
 			layout.setOrientation(LinearLayout.VERTICAL);
@@ -146,10 +146,10 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 		}case 1:{
 			final TextView explainView2 = new TextView(this);
 			explainView2.setText(getString(R.string.template_explain));
-			explainView2.setTextAppearance(this,android.R.style.TextAppearance);
+			explainView2.setTextAppearance(this,android.R.style.TextAppearance_Small);
 			final EditText editText2 = new EditText(this);
 			editText2.setText(template2);
-			editText2.setLines(2);
+			editText2.setLines(3);
 			editText2.setGravity(Gravity.TOP);
 			final LinearLayout layout = new LinearLayout(this);
 			layout.setOrientation(LinearLayout.VERTICAL);
@@ -177,10 +177,10 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 		}case 2:{
 			final TextView explainView3 = new TextView(this);
 			explainView3.setText(getString(R.string.template_explain));
-			explainView3.setTextAppearance(this,android.R.style.TextAppearance);
+			explainView3.setTextAppearance(this,android.R.style.TextAppearance_Small);
 			final EditText editText3 = new EditText(this);
 			editText3.setText(template3);
-			editText3.setLines(2);
+			editText3.setLines(3);
 			editText3.setGravity(Gravity.TOP);
 			final LinearLayout layout = new LinearLayout(this);
 			layout.setOrientation(LinearLayout.VERTICAL);
