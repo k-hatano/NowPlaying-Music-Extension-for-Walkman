@@ -37,6 +37,7 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 
+		findViewById(R.id.reset_all_settings).setOnClickListener(this);
 		findViewById(R.id.ok).setOnClickListener(this);
 	}
 
@@ -51,6 +52,8 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 		int id = item.getItemId();
 		if (id == R.id.action_ok) {
 			finish();
+		}else if (id == R.id.action_reset_all_settings) {
+			confirmResetAllSettings();
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -256,6 +259,40 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 	public void onClick(View arg0) {
 		if(arg0==findViewById(R.id.ok)){
 			finish();
+		}else if(arg0==findViewById(R.id.reset_all_settings)){
+			confirmResetAllSettings();
 		}
 	}
+	
+	public void confirmResetAllSettings(){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle(getString(R.string.reset_all_settings));
+        alertDialogBuilder.setMessage(getString(R.string.are_you_sure));
+        alertDialogBuilder.setPositiveButton(getString(R.string.ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    	resetAllSettings();
+                    }
+                });
+        alertDialogBuilder.setNegativeButton(getString(R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        alertDialogBuilder.setCancelable(true);
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+	}
+	
+	public void resetAllSettings(){
+		Statics.setPreferenceString(this,Statics.KEY_TEXT_1,getString(R.string.content_default));
+		Statics.setPreferenceString(this,Statics.KEY_TEXT_2,getString(R.string.content_default_2));
+		Statics.setPreferenceString(this,Statics.KEY_TEXT_3,getString(R.string.content_default_3));
+		Statics.setPreferenceValue(this,Statics.KEY_TEXT_QUIT,0);
+		updatePreferencesValues();
+		updateSettingsListView();
+	}
+	
 }

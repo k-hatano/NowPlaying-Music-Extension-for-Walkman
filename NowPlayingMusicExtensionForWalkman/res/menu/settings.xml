@@ -3,6 +3,12 @@
     tools:context="jp.nita.NowPlayingMusicExtension.SettingsActivity" >
 
     <item
+        android:id="@+id/action_reset_all_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/reset_all_settings" android:icon="@android:drawable/ic_menu_agenda"/>
+    
+    <item
         android:id="@+id/action_ok"
         android:orderInCategory="100"
         android:showAsAction="never"

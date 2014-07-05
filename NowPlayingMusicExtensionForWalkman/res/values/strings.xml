@@ -3,7 +3,6 @@
 
     <!-- The name of the application as a whole -->
     <string name="app_name">NowPlaying Music Extension</string>
-    <string name="description">Share playing song</string>
 
     <!-- This text is shown in the lists of infinite music extension as a description of the extension -->
     <string name="action_settings">Settings</string>
@@ -26,7 +25,6 @@
     <string name="template_3">Template 3</string>
     <string name="template_explain">You can use the following keywords and they will be replaced:\n  $t (with title of song)\n  $a (with name of artist)\n  $l (with title of album)\n  $d (with duration of song)\n  $y (with year when song was recorded)</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <string name="title">Title</string>
     <string name="album">Album</string>
     <string name="artist">Artist</string>
@@ -49,5 +47,10 @@
     <string name="copy">Copy</string>
     <string name="copied">Copied </string>
     <string name="search">Search</string>
+    <string name="not_available">Now Available</string>
+    <string name="reset_all_settings">Reset All Settings</string>
+    <string name="are_you_sure">Are you sure you want to reset all settings to default?</string>
+    
+    <string name="description">Share playing song</string>
 
 </resources>

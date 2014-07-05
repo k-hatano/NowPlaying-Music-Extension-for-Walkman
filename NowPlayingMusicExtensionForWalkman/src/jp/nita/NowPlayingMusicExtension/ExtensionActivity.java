@@ -23,6 +23,7 @@ import java.util.Map;
 import android.R.drawable;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -45,6 +46,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
@@ -211,6 +213,9 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 	    	Intent intent=new Intent(this,SettingsActivity.class);
 	        startActivity(intent);
 	    	break;
+	    case R.id.action_close:
+	    	finish();
+	    	break;
 	    }
 	    return true;
 	}
@@ -295,13 +300,13 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 			finish();
 		}else if(v==findViewById(R.id.share_music_file)){
 			try {
-				Uri trackUri = getIntent().getData();
 				String ext=data.substring(data.lastIndexOf(".")+1);
 				String type=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
+				if(type==null||type.equals("")) type="application/octet-stream";
 				Intent intent = new Intent();
 				intent.setAction(Intent.ACTION_SEND);
 				intent.setType(type);
-				intent.putExtra(Intent.EXTRA_STREAM, trackUri);
+				intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(data));
 				startActivityForResult(intent,PICKUP_SEND_TO_APP);
 			} catch (Exception e) {
 				showToast(this,getString(R.string.sharing_failed));
@@ -310,13 +315,13 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 			}
 		}else if(v==findViewById(R.id.share_album_artwork_file)){
 			try {
-				Uri trackUri = Uri.parse(albumArtwork);
-				//String ext=albumArtwork.substring(albumArtwork.lastIndexOf(".")+1);
-				//String type=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
+				String ext=albumArtwork.substring(data.lastIndexOf(".")+1);
+				String type=MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext);
+				if(type==null||type.equals("")) type="application/octet-stream";
 				Intent intent = new Intent();
 				intent.setAction(Intent.ACTION_SEND);
-				//intent.setType(type);
-				intent.putExtra(Intent.EXTRA_STREAM, trackUri);
+				intent.setType(type);
+				intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(albumArtwork));
 				startActivityForResult(intent,PICKUP_SEND_TO_APP);
 			} catch (Exception e) {
 				showToast(this,getString(R.string.sharing_failed));
@@ -383,8 +388,21 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 				new int[]{android.R.id.text1,android.R.id.text2});
 		items.setAdapter(adapter);
 		
-		((TextView)findViewById(R.id.music_file_path)).setText(data);
-		((TextView)findViewById(R.id.album_artwork_file_path)).setText(albumArtwork);
+		if(data==null||data.equals("")){
+			((TextView)findViewById(R.id.music_file_path)).setText(getString(R.string.not_available));
+			((Button)findViewById(R.id.share_music_file)).setVisibility(View.INVISIBLE);
+		}else{
+			((TextView)findViewById(R.id.music_file_path)).setText(data);
+			((Button)findViewById(R.id.share_music_file)).setVisibility(View.VISIBLE);
+		}
+		
+		if(albumArtwork==null||albumArtwork.equals("")){
+			((TextView)findViewById(R.id.album_artwork_file_path)).setText(getString(R.string.not_available));
+			((Button)findViewById(R.id.share_album_artwork_file)).setVisibility(View.INVISIBLE);
+		}else{
+			((TextView)findViewById(R.id.album_artwork_file_path)).setText(albumArtwork);
+			((Button)findViewById(R.id.share_album_artwork_file)).setVisibility(View.VISIBLE);
+		}
 
 		items.setOnItemClickListener(this);
 	}
@@ -463,10 +481,22 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 						ExtensionActivity.showToast(ExtensionActivity.this, ""+getString(R.string.copied)+" "+string);
 						break;
 					}
+					case 1:{
+						Intent intent=new Intent(Intent.ACTION_WEB_SEARCH);
+						intent.putExtra(SearchManager.QUERY,string);
+						startActivityForResult(intent,PICKUP_SEND_TO_APP);
+						break;
+					}
 					}
 				}
 			}).show();
 		}
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		updatePreferencesValues();
 	}
 
 }
