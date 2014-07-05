@@ -5,6 +5,7 @@
     <string name="app_name">NowPlaying Music Extension</string>
 
     <!-- This text is shown in the lists of infinite music extension as a description of the extension -->
+    <string name="description">Share playing song</string>
     <string name="action_settings">Settings</string>
     <string name="share_text">Share Text</string>
     <string name="share_file">Share File</string>
@@ -47,10 +48,8 @@
     <string name="copy">Copy</string>
     <string name="copied">Copied </string>
     <string name="search">Search</string>
-    <string name="not_available">Now Available</string>
+    <string name="not_available">Not Available</string>
     <string name="reset_all_settings">Reset All Settings</string>
     <string name="are_you_sure">Are you sure you want to reset all settings to default?</string>
-    
-    <string name="description">Share playing song</string>
 
 </resources>
