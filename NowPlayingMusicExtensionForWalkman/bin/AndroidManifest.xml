@@ -41,9 +41,10 @@
         @drawable/icon will be used as icon for this extension in the extension list
         -->
         <activity
-            android:name="jp.nita.NowPlayingMusicExtension.ExtensionActivity"
+            android:name=".ExtensionActivity"
             android:icon="@drawable/ic_launcher"
-            android:theme="@android:style/Theme.Holo" android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Holo" >
             <intent-filter>
                 <action android:name="com.sonyericsson.media.infinite.ACTION_VIEW_INFINITE" />
                 <!-- Mime type should be set to audio/* for Music Extensions -->
@@ -55,15 +56,20 @@
         Receiver for registering a description text that
         will be shown in the extension list together with the activity icon
         -->
-        <receiver android:name="jp.nita.NowPlayingMusicExtension.ExtensionReceiver" >
+        <receiver android:name=".ExtensionReceiver" >
             <intent-filter>
                 <action android:name="com.sonyericsson.media.infinite.ACTION_GET_DETAILS" />
             </intent-filter>
         </receiver>
 
         <activity
-            android:name="jp.nita.NowPlayingMusicExtension.SettingsActivity"
-            android:label="@string/title_activity_settings" android:launchMode="singleTask">
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name=".WebViewActivity"
+            android:label="@string/title_activity_web_view" >
         </activity>
     </application>
 

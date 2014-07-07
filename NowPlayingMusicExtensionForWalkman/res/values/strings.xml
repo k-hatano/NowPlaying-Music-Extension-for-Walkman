@@ -51,5 +51,7 @@
     <string name="not_available">Not Available</string>
     <string name="reset_all_settings">Reset All Settings</string>
     <string name="are_you_sure">Are you sure you want to reset all settings to default?</string>
+    <string name="title_activity_web_view">Authorization</string>
+    <string name="setting_failed">Setting failed</string>
 
 </resources>

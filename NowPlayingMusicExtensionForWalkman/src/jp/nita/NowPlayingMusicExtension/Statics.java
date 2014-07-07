@@ -13,6 +13,8 @@ public class Statics {
 	public static final String KEY_TEXT_3 = "templete3";
 	public static final String KEY_TEXT_QUIT = "quitAfterSharing";
 	
+	public static final String EXTRA_URL = "url";
+	
 	public static void setPreferenceValue(Context context,String key,int val){
 		SharedPreferences pref=context.getSharedPreferences(PREF_KEY,Activity.MODE_PRIVATE);
 		Editor editor=pref.edit();

@@ -249,16 +249,28 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 	public void onClick(View v) {
 		((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 		if(v==findViewById(R.id.send)){
-			try {
-				Intent intent = new Intent();
-				intent.setAction(Intent.ACTION_SEND);
-				intent.setType("text/plain");
-				intent.putExtra(Intent.EXTRA_TEXT, ((TextView)findViewById(R.id.content)).getText().toString());
-				startActivityForResult(intent,PICKUP_SEND_TO_APP);
-			} catch (Exception e) {
-				showToast(this,getString(R.string.sharing_failed));
-				Log.d("ExtensionActivity", "Error");
-				e.printStackTrace();
+			Spinner dstSpin=(Spinner)findViewById(R.id.destination);
+			int dst=dstSpin.getSelectedItemPosition();
+			switch(dst){
+			case 0:{
+				TweetAsyncTaskCollection collection=new TweetAsyncTaskCollection();
+				TweetAsyncTaskCollection.AuthorizationAsyncTask task=collection.new AuthorizationAsyncTask(this);
+				task.execute();
+				break;
+			}case 2:{
+				try {
+					Intent intent = new Intent();
+					intent.setAction(Intent.ACTION_SEND);
+					intent.setType("text/plain");
+					intent.putExtra(Intent.EXTRA_TEXT, ((TextView)findViewById(R.id.content)).getText().toString());
+					startActivityForResult(intent,PICKUP_SEND_TO_APP);
+				} catch (Exception e) {
+					showToast(this,getString(R.string.sharing_failed));
+					Log.d("ExtensionActivity", "Error");
+					e.printStackTrace();
+				}
+				break;
+			}
 			}
 		}else if(v==findViewById(R.id.apply_template)){
 			CharSequence list[]=new String[4];

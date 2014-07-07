@@ -25,10 +25,11 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_close=0x7f080014;
-        public static final int action_ok=0x7f080016;
-        public static final int action_reset_all_settings=0x7f080015;
-        public static final int action_settings=0x7f080013;
+        public static final int action_cancel=0x7f080018;
+        public static final int action_close=0x7f080015;
+        public static final int action_ok=0x7f080017;
+        public static final int action_reset_all_settings=0x7f080016;
+        public static final int action_settings=0x7f080014;
         public static final int album_artwork_file_path=0x7f08000a;
         public static final int apply_template=0x7f080003;
         public static final int close=0x7f08000f;
@@ -48,14 +49,17 @@ public final class R {
         public static final int tab2=0x7f080007;
         public static final int tab3=0x7f08000c;
         public static final int tableLayout1=0x7f080004;
+        public static final int webView=0x7f080013;
     }
     public static final class layout {
         public static final int main=0x7f030000;
         public static final int settings=0x7f030001;
+        public static final int web_view=0x7f030002;
     }
     public static final class menu {
         public static final int main=0x7f070000;
         public static final int settings=0x7f070001;
+        public static final int web_view=0x7f070002;
     }
     public static final class string {
         public static final int action_settings=0x7f050002;
@@ -91,6 +95,7 @@ public final class R {
         public static final int reset_all_settings=0x7f05002d;
         public static final int search=0x7f05002b;
         public static final int send=0x7f050007;
+        public static final int setting_failed=0x7f050030;
         public static final int settings=0x7f050005;
         public static final int share_album_artwork_file=0x7f050026;
         public static final int share_file=0x7f050004;
@@ -105,6 +110,7 @@ public final class R {
         public static final int template_explain=0x7f050014;
         public static final int title=0x7f050016;
         public static final int title_activity_settings=0x7f050015;
+        public static final int title_activity_web_view=0x7f05002f;
         public static final int track_no=0x7f050019;
         public static final int twitter=0x7f050008;
         public static final int twitter_authorization_required=0x7f050009;
