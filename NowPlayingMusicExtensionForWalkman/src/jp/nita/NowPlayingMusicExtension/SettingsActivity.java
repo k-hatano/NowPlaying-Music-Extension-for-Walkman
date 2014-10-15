@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jp.nita.NowPlayingMusicExtension.TweetAsyncTaskCollection.AuthorizationAsyncTask;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -29,6 +31,9 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 	String template2;
 	String template3;
 	int quitAfterSharing;
+	
+	String twitterOauthToken;
+	String twitterOauthVerifier;
 	
 	int position=0;
 	
@@ -64,6 +69,8 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 		template2=pref.getString(Statics.KEY_TEXT_2,getString(R.string.content_default_2));
 		template3=pref.getString(Statics.KEY_TEXT_3,getString(R.string.content_default_3));
 		quitAfterSharing=pref.getInt(Statics.KEY_TEXT_QUIT,0);
+		twitterOauthToken=pref.getString(Statics.KEY_TWITTER_OAUTH_TOKEN,Statics.EMPTY);
+		twitterOauthVerifier=pref.getString(Statics.KEY_TWITTER_OAUTH_VERIFIER,Statics.EMPTY);
 	}
 	
 	public void updateSettingsListView(){
@@ -90,6 +97,11 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 			map=new HashMap<String,String>();
 			map.put("key", getString(R.string.quit_after_sharing));
 			map.put("value", Statics.getOnOrOffString(this, quitAfterSharing));
+			list.add(map);
+			
+			map=new HashMap<String,String>();
+			map.put("key", getString(R.string.twitter));
+			map.put("value", Statics.getAuthorizedOrUnauthorized(this, twitterOauthToken));
 			list.add(map);
 			
 		}
@@ -223,6 +235,11 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 				}
 			}).show();
 			break;
+		}case 4:{
+			TweetAsyncTaskCollection collection=new TweetAsyncTaskCollection();
+			TweetAsyncTaskCollection.AuthorizationAsyncTask task=collection.new AuthorizationAsyncTask(this);
+			task.execute();
+			break;
 		}
 		}
 	}
@@ -291,6 +308,8 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 		Statics.setPreferenceString(this,Statics.KEY_TEXT_2,getString(R.string.content_default_2));
 		Statics.setPreferenceString(this,Statics.KEY_TEXT_3,getString(R.string.content_default_3));
 		Statics.setPreferenceValue(this,Statics.KEY_TEXT_QUIT,0);
+		Statics.setPreferenceString(this,Statics.KEY_TWITTER_OAUTH_TOKEN,Statics.EMPTY);
+		Statics.setPreferenceString(this,Statics.KEY_TWITTER_OAUTH_VERIFIER,Statics.EMPTY);
 		updatePreferencesValues();
 		updateSettingsListView();
 	}

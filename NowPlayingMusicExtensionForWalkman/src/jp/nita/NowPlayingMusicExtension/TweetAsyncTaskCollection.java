@@ -4,6 +4,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.RequestToken;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -18,9 +19,9 @@ public class TweetAsyncTaskCollection {
 
 	public class AuthorizationAsyncTask extends AsyncTask<Void, Void, Void>{
 
-		ExtensionActivity superview;
+		Activity superview;
 
-		AuthorizationAsyncTask(ExtensionActivity app){
+		AuthorizationAsyncTask(Activity app){
 			super();
 			superview=app;
 		}

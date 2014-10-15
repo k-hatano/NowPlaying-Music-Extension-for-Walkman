@@ -71,6 +71,9 @@ public final class R {
         public static final int apply_template=0x7f05000c;
         public static final int are_you_sure=0x7f05002e;
         public static final int artist=0x7f050018;
+        public static final int authorization_failed=0x7f050032;
+        public static final int authorization_succeed=0x7f050031;
+        public static final int authorized=0x7f050033;
         public static final int cancel=0x7f050021;
         public static final int close=0x7f050022;
         public static final int composer=0x7f05001b;
@@ -114,6 +117,7 @@ public final class R {
         public static final int track_no=0x7f050019;
         public static final int twitter=0x7f050008;
         public static final int twitter_authorization_required=0x7f050009;
+        public static final int unauthorized=0x7f050034;
         public static final int year=0x7f05001a;
     }
     public static final class style {

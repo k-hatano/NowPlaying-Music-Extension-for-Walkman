@@ -12,8 +12,12 @@ public class Statics {
 	public static final String KEY_TEXT_2 = "templete2";
 	public static final String KEY_TEXT_3 = "templete3";
 	public static final String KEY_TEXT_QUIT = "quitAfterSharing";
+	public static final String KEY_TWITTER_OAUTH_TOKEN = "twitterOauthToken";
+	public static final String KEY_TWITTER_OAUTH_VERIFIER = "twitterOauthVerifier";
 	
 	public static final String EXTRA_URL = "url";
+	
+	public static final String EMPTY = "";
 	
 	public static void setPreferenceValue(Context context,String key,int val){
 		SharedPreferences pref=context.getSharedPreferences(PREF_KEY,Activity.MODE_PRIVATE);
@@ -32,5 +36,10 @@ public class Statics {
 	public static String getOnOrOffString(Context context,int n){
 		if(n>0) return context.getString(R.string.on);
 		else return context.getString(R.string.off);
+	}
+	
+	public static String getAuthorizedOrUnauthorized(Context context,String token){
+		if(token==null||"".equals(token)) return context.getString(R.string.unauthorized);
+		else return context.getString(R.string.authorized);
 	}
 }

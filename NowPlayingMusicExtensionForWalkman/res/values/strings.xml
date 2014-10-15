@@ -53,5 +53,11 @@
     <string name="are_you_sure">Are you sure you want to reset all settings to default?</string>
     <string name="title_activity_web_view">Authorization</string>
     <string name="setting_failed">Setting failed</string>
+    
+    <string name="authorization_succeed">Authorization succeeded</string>
+    <string name="authorization_failed">Authorization failed</string>
+    
+    <string name="authorized">Authorized</string>
+    <string name="unauthorized">Unauthorized</string>
 
 </resources>
