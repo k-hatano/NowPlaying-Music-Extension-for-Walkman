@@ -91,7 +91,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
         findViewById(R.id.share_music_file).setOnClickListener(this);
         findViewById(R.id.share_album_artwork_file).setOnClickListener(this);
         
-        findViewById(R.id.destination).setOnClickListener(this);
+        ((Spinner)findViewById(R.id.destination)).setOnItemSelectedListener(this);
         
         TabHost tabHost = getTabHost();
 
@@ -518,6 +518,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 	public void onResume(){
 		super.onResume();
 		updatePreferencesValues();
+		checkAuthorization();
 	}
 
 	@Override
