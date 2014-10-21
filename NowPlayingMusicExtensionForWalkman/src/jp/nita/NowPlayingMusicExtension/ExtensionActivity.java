@@ -45,6 +45,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -56,7 +57,7 @@ import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 @SuppressWarnings("deprecation")
-public class ExtensionActivity extends TabActivity implements OnClickListener, OnItemClickListener {
+public class ExtensionActivity extends TabActivity implements OnClickListener, OnItemClickListener, OnItemSelectedListener {
 	final static Handler handler = new Handler();
 	
 	public static final int PICKUP_SEND_TO_APP = 1;
@@ -65,6 +66,8 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 	String template2;
 	String template3;
 	int quitAfterSharing;
+	String twitterOauthToken;
+	String twitterOauthVerifier;
 	
 	String title;
 	String artist;
@@ -87,6 +90,8 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
         findViewById(R.id.close).setOnClickListener(this);
         findViewById(R.id.share_music_file).setOnClickListener(this);
         findViewById(R.id.share_album_artwork_file).setOnClickListener(this);
+        
+        findViewById(R.id.destination).setOnClickListener(this);
         
         TabHost tabHost = getTabHost();
 
@@ -197,6 +202,8 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
                 trackCursor.close();
             }
         }
+        
+        checkAuthorization();
 
     }
     
@@ -226,6 +233,8 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 		template2=pref.getString(Statics.KEY_TEXT_2,getString(R.string.content_default_2));
 		template3=pref.getString(Statics.KEY_TEXT_3,getString(R.string.content_default_3));
 		quitAfterSharing=pref.getInt(Statics.KEY_TEXT_QUIT,0);
+		twitterOauthToken=pref.getString(Statics.KEY_TWITTER_OAUTH_TOKEN,Statics.EMPTY);
+		twitterOauthVerifier=pref.getString(Statics.KEY_TWITTER_OAUTH_VERIFIER,Statics.EMPTY);
 	}
 	
 	public void applyDefault(){
@@ -509,6 +518,47 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 	public void onResume(){
 		super.onResume();
 		updatePreferencesValues();
+	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+			long arg3) {
+		if(arg0==findViewById(R.id.destination)){
+			checkAuthorization();
+		}
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void checkAuthorization(){
+		int pos=((Spinner)findViewById(R.id.destination)).getSelectedItemPosition();
+		switch(pos){
+		case 0:{
+			if(twitterOauthToken==null||twitterOauthVerifier==null
+					||twitterOauthToken.equals("")||twitterOauthVerifier.equals("")){
+				findViewById(R.id.authorization_required).setVisibility(View.VISIBLE);
+				findViewById(R.id.send).setEnabled(false);
+			}else{
+				findViewById(R.id.authorization_required).setVisibility(View.GONE);
+				findViewById(R.id.send).setEnabled(true);
+			}
+			break;
+		}
+		case 1:{
+			findViewById(R.id.authorization_required).setVisibility(View.VISIBLE);
+			findViewById(R.id.send).setEnabled(false);
+			break;
+		}
+		case 2:{
+			findViewById(R.id.authorization_required).setVisibility(View.GONE);
+			findViewById(R.id.send).setEnabled(true);
+			break;
+		}
+		}
 	}
 
 }

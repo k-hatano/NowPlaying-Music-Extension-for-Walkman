@@ -57,6 +57,8 @@
     <string name="authorization_succeed">Authorization succeeded</string>
     <string name="authorization_failed">Authorization failed</string>
     
+    <string name="authorization_required">Authorization required</string>
+    
     <string name="authorized">Authorized</string>
     <string name="unauthorized">Unauthorized</string>
 
