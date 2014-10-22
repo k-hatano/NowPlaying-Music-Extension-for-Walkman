@@ -104,6 +104,11 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 			map.put("value", Statics.getAuthorizedOrUnauthorized(this, twitterOauthToken));
 			list.add(map);
 			
+			map=new HashMap<String,String>();
+			map.put("key", getString(R.string.facebook));
+			map.put("value", getString(R.string.unauthorized));
+			list.add(map);
+			
 		}
 		SimpleAdapter adapter
 		=new SimpleAdapter(this,list
@@ -239,6 +244,9 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 			TweetAsyncTaskCollection collection=new TweetAsyncTaskCollection();
 			TweetAsyncTaskCollection.AuthorizationAsyncTask task=collection.new AuthorizationAsyncTask(this);
 			task.execute();
+			break;
+		}case 5:{
+			PostToFacebookClass.authorize(this);
 			break;
 		}
 		}
