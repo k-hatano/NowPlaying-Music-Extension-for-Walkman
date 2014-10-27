@@ -15,10 +15,16 @@
  *
  */
 package jp.nita.NowPlayingMusicExtension;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.FacebookError;
 
 import android.R.drawable;
 import android.app.Activity;
@@ -57,18 +63,20 @@ import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 @SuppressWarnings("deprecation")
-public class ExtensionActivity extends TabActivity implements OnClickListener, OnItemClickListener, OnItemSelectedListener {
+public class ExtensionActivity extends TabActivity implements OnClickListener, OnItemClickListener, OnItemSelectedListener
+,AsyncFacebookRunner.RequestListener{
 	final static Handler handler = new Handler();
-	
+
 	public static final int PICKUP_SEND_TO_APP = 1;
-	
+
 	String template1;
 	String template2;
 	String template3;
 	int quitAfterSharing;
 	String twitterOauthToken;
 	String twitterOauthVerifier;
-	
+	String facebookAccessToken;
+
 	String title;
 	String artist;
 	String album;
@@ -78,22 +86,22 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 	String trackno;
 	String data;
 	String albumArtwork;
-	
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        
-        findViewById(R.id.apply_template).setOnClickListener(this);
-        findViewById(R.id.send).setOnClickListener(this);
-        findViewById(R.id.settings).setOnClickListener(this);
-        findViewById(R.id.close).setOnClickListener(this);
-        findViewById(R.id.share_music_file).setOnClickListener(this);
-        findViewById(R.id.share_album_artwork_file).setOnClickListener(this);
-        
-        ((Spinner)findViewById(R.id.destination)).setOnItemSelectedListener(this);
-        
-        TabHost tabHost = getTabHost();
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+
+		findViewById(R.id.apply_template).setOnClickListener(this);
+		findViewById(R.id.send).setOnClickListener(this);
+		findViewById(R.id.settings).setOnClickListener(this);
+		findViewById(R.id.close).setOnClickListener(this);
+		findViewById(R.id.share_music_file).setOnClickListener(this);
+		findViewById(R.id.share_album_artwork_file).setOnClickListener(this);
+
+		((Spinner)findViewById(R.id.destination)).setOnItemSelectedListener(this);
+
+		TabHost tabHost = getTabHost();
 
 		TabSpec tab1 = tabHost.newTabSpec(getString(R.string.share_text));
 		tab1.setIndicator(getString(R.string.share_text),getResources().getDrawable(drawable.ic_menu_edit));
@@ -112,31 +120,31 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 
 		tabHost.setCurrentTab(0);
 
-        Intent intent = getIntent();
+		Intent intent = getIntent();
 
-        // Retrieve the URI from the intent, this is a URI to a MediaStore audio
-        // file
-        Uri trackUri = intent.getData();
+		// Retrieve the URI from the intent, this is a URI to a MediaStore audio
+		// file
+		Uri trackUri = intent.getData();
 
-        // Use it to query the media provider
-        Cursor trackCursor = getContentResolver().query(
-                trackUri,
-                new String[] {
-                		MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
+		// Use it to query the media provider
+		Cursor trackCursor = getContentResolver().query(
+				trackUri,
+				new String[] {
+						MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST,
 						MediaStore.Audio.Media.ALBUM, MediaStore.Audio.Media.DURATION,
 						MediaStore.Audio.Media.COMPOSER, MediaStore.Audio.Media.YEAR,
 						MediaStore.Audio.Media.TRACK,	MediaStore.Audio.Media.DATA,
 						MediaStore.Audio.Media.ALBUM_ID
-                }, null, null, null);
+				}, null, null, null);
 
-        if (trackCursor != null) {
-            try {
-                if (trackCursor.moveToFirst()) {
-                	Time time = new Time();
+		if (trackCursor != null) {
+			try {
+				if (trackCursor.moveToFirst()) {
+					Time time = new Time();
 					time.set(trackCursor.getLong(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)));
 					duration=time.format("%M:%S");
-                	
-                	try{
+
+					try{
 						title=trackCursor.getString(trackCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
 					}catch (IllegalArgumentException e){
 						title="";
@@ -181,7 +189,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 					}catch (IllegalArgumentException e){
 						if(data==null) data="";
 					}
-					
+
 					Cursor albumCursor = getContentResolver().query(
 							MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
 							null, MediaStore.Audio.Albums._ID + "=?", 
@@ -197,36 +205,36 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 					updateDestinationSpinner();
 					updateInformationListView();
 					applyDefault();
-                }
-            } finally {
-                trackCursor.close();
-            }
-        }
-        
-        checkAuthorization();
+				}
+			} finally {
+				trackCursor.close();
+			}
+		}
 
-    }
-    
-    @Override
+		checkAuthorization();
+
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    case R.id.action_settings:
-	    	Intent intent=new Intent(this,SettingsActivity.class);
-	        startActivity(intent);
-	    	break;
-	    case R.id.action_close:
-	    	finish();
-	    	break;
-	    }
-	    return true;
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			Intent intent=new Intent(this,SettingsActivity.class);
+			startActivity(intent);
+			break;
+		case R.id.action_close:
+			finish();
+			break;
+		}
+		return true;
 	}
-	
+
 	public void updatePreferencesValues(){
 		SharedPreferences pref=getSharedPreferences(Statics.PREF_KEY,Activity.MODE_PRIVATE);
 		template1=pref.getString(Statics.KEY_TEXT_1,getString(R.string.content_default));
@@ -235,15 +243,16 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 		quitAfterSharing=pref.getInt(Statics.KEY_TEXT_QUIT,0);
 		twitterOauthToken=pref.getString(Statics.KEY_TWITTER_OAUTH_TOKEN,Statics.EMPTY);
 		twitterOauthVerifier=pref.getString(Statics.KEY_TWITTER_OAUTH_VERIFIER,Statics.EMPTY);
+		facebookAccessToken=pref.getString(Statics.KEY_FACEBOOK_ACCESS_TOKEN,Statics.EMPTY);
 	}
-	
+
 	public void applyDefault(){
 		updatePreferencesValues();
 		String content=template1;
 		content=applyTemplate(content);
 		((TextView)findViewById(R.id.content)).setText(content);
 	}
-	
+
 	public String applyTemplate(String param){
 		param=param.replace("$t",title);
 		param=param.replace("$a",artist);
@@ -263,8 +272,11 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 			switch(dst){
 			case 0:{
 				TweetAsyncTaskCollection collection=new TweetAsyncTaskCollection();
-				TweetAsyncTaskCollection.AuthorizationAsyncTask task=collection.new AuthorizationAsyncTask(this);
-				task.execute();
+				TweetAsyncTaskCollection.TweetAsyncTask task=collection.new TweetAsyncTask(this);
+				task.execute(((TextView)findViewById(R.id.content)).getText().toString());
+				break;
+			}case 1:{
+				PostToFacebookClass.post(this,((TextView)findViewById(R.id.content)).getText().toString());
 				break;
 			}case 2:{
 				try {
@@ -351,7 +363,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 			}
 		}
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		super.onActivityResult(requestCode,resultCode,data);
@@ -359,7 +371,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 			if(quitAfterSharing>0) finish();
 		}
 	}
-	
+
 	public void updateInformationListView(){
 		ListView items=(ListView)findViewById(R.id.information);
 		List<Map<String,String>> list=new ArrayList<Map<String,String>>();
@@ -370,37 +382,37 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 			map.put("key", getString(R.string.title));
 			map.put("value", title);
 			list.add(map);
-			
+
 			map=new HashMap<String,String>();
 			map.put("key", getString(R.string.artist));
 			map.put("value", artist);
 			list.add(map);
-			
+
 			map=new HashMap<String,String>();
 			map.put("key", getString(R.string.album));
 			map.put("value", album);
 			list.add(map);
-			
+
 			map=new HashMap<String,String>();
 			map.put("key", getString(R.string.duration));
 			map.put("value", duration);
 			list.add(map);
-			
+
 			map=new HashMap<String,String>();
 			map.put("key", getString(R.string.year));
 			map.put("value", year);
 			list.add(map);
-			
+
 			map=new HashMap<String,String>();
 			map.put("key", getString(R.string.track_no));
 			map.put("value", trackno);
 			list.add(map);
-			
+
 			map=new HashMap<String,String>();
 			map.put("key", getString(R.string.composer));
 			map.put("value", composer);
 			list.add(map);
-			
+
 		}
 		SimpleAdapter adapter
 		=new SimpleAdapter(this,list
@@ -408,7 +420,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 				new String[]{"key","value"},
 				new int[]{android.R.id.text1,android.R.id.text2});
 		items.setAdapter(adapter);
-		
+
 		if(data==null||data.equals("")){
 			((TextView)findViewById(R.id.music_file_path)).setText(getString(R.string.not_available));
 			((Button)findViewById(R.id.share_music_file)).setVisibility(View.INVISIBLE);
@@ -416,7 +428,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 			((TextView)findViewById(R.id.music_file_path)).setText(data);
 			((Button)findViewById(R.id.share_music_file)).setVisibility(View.VISIBLE);
 		}
-		
+
 		if(albumArtwork==null||albumArtwork.equals("")){
 			((TextView)findViewById(R.id.album_artwork_file_path)).setText(getString(R.string.not_available));
 			((Button)findViewById(R.id.share_album_artwork_file)).setVisibility(View.INVISIBLE);
@@ -427,7 +439,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 
 		items.setOnItemClickListener(this);
 	}
-	
+
 	public void updateDestinationSpinner(){
 		Spinner items=(Spinner)findViewById(R.id.destination);
 		List<String> list=new ArrayList<String>();
@@ -444,7 +456,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 
 		// items.setOnItemClickListener(this);
 	}
-	
+
 	public static void showToast(final Context context,final String title){
 		new Thread(new Runnable(){
 			@Override
@@ -513,7 +525,7 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 			}).show();
 		}
 	}
-	
+
 	@Override
 	public void onResume(){
 		super.onResume();
@@ -532,9 +544,9 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public void checkAuthorization(){
 		int pos=((Spinner)findViewById(R.id.destination)).getSelectedItemPosition();
 		switch(pos){
@@ -550,8 +562,8 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 			break;
 		}
 		case 1:{
-			findViewById(R.id.authorization_required).setVisibility(View.VISIBLE);
-			findViewById(R.id.send).setEnabled(false);
+			findViewById(R.id.authorization_required).setVisibility(View.GONE);
+			findViewById(R.id.send).setEnabled(true);
 			break;
 		}
 		case 2:{
@@ -560,6 +572,34 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 			break;
 		}
 		}
+	}
+
+	@Override
+	public void onFacebookError(FacebookError e, Object state) {
+		showToast(ExtensionActivity.this,getString(R.string.posting_failed));
+	}
+
+	@Override
+	public void onComplete(String response, Object state) {
+		showToast(ExtensionActivity.this,getString(R.string.posting_completed));
+		if(quitAfterSharing>0) ExtensionActivity.this.finish();
+	}
+
+	@Override
+	public void onIOException(IOException e, Object state) {
+		showToast(ExtensionActivity.this,getString(R.string.posting_failed));
+	}
+
+	@Override
+	public void onFileNotFoundException(FileNotFoundException e,
+			Object state) {
+		showToast(ExtensionActivity.this,getString(R.string.posting_failed));
+	}
+
+	@Override
+	public void onMalformedURLException(MalformedURLException e,
+			Object state) {
+		showToast(ExtensionActivity.this,getString(R.string.posting_failed));
 	}
 
 }

@@ -14,6 +14,7 @@ public class Statics {
 	public static final String KEY_TEXT_QUIT = "quitAfterSharing";
 	public static final String KEY_TWITTER_OAUTH_TOKEN = "twitterOauthToken";
 	public static final String KEY_TWITTER_OAUTH_VERIFIER = "twitterOauthVerifier";
+	public static final String KEY_FACEBOOK_ACCESS_TOKEN = "facebookAccessToken";
 	
 	public static final String EXTRA_URL = "url";
 	

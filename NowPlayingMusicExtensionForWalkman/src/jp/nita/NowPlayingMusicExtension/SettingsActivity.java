@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jp.nita.NowPlayingMusicExtension.TweetAsyncTaskCollection.AuthorizationAsyncTask;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -34,6 +32,7 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 	
 	String twitterOauthToken;
 	String twitterOauthVerifier;
+	String facebookAccessToken;
 	
 	int position=0;
 	
@@ -71,6 +70,7 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 		quitAfterSharing=pref.getInt(Statics.KEY_TEXT_QUIT,0);
 		twitterOauthToken=pref.getString(Statics.KEY_TWITTER_OAUTH_TOKEN,Statics.EMPTY);
 		twitterOauthVerifier=pref.getString(Statics.KEY_TWITTER_OAUTH_VERIFIER,Statics.EMPTY);
+		facebookAccessToken=pref.getString(Statics.KEY_FACEBOOK_ACCESS_TOKEN,Statics.EMPTY);
 	}
 	
 	public void updateSettingsListView(){
@@ -106,7 +106,7 @@ public class SettingsActivity extends Activity implements OnItemClickListener,On
 			
 			map=new HashMap<String,String>();
 			map.put("key", getString(R.string.facebook));
-			map.put("value", getString(R.string.unauthorized));
+			map.put("value", Statics.getAuthorizedOrUnauthorized(this, facebookAccessToken));
 			list.add(map);
 			
 		}

@@ -56,10 +56,14 @@
     
     <string name="authorization_succeed">Authorization succeeded</string>
     <string name="authorization_failed">Authorization failed</string>
-    
     <string name="authorization_required">Authorization required</string>
-    
     <string name="authorized">Authorized</string>
     <string name="unauthorized">Unauthorized</string>
-
+    <string name="would_you_like_to_unauthorize">Would you like to unauthorize?</string>
+    
+    <string name="would_you_like_to_re_authorize">NowPlaying Music Extension is already authorized to use your account.\nWould you like to re-authorize?</string>
+	<string name="posting_completed">Posting completed</string>
+    <string name="posting_failed">Posting failed</string>
+    <string name="posting_cancelled">Posting cancelled</string>
+    
 </resources>
