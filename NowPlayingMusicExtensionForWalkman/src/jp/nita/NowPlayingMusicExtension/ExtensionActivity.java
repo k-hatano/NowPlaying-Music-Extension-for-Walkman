@@ -29,6 +29,7 @@ import com.facebook.android.FacebookError;
 import android.R.drawable;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Instrumentation;
 import android.app.SearchManager;
 import android.app.TabActivity;
 import android.content.Context;
@@ -37,12 +38,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.ClipboardManager;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -600,6 +603,31 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 	public void onMalformedURLException(MalformedURLException e,
 			Object state) {
 		showToast(ExtensionActivity.this,getString(R.string.posting_failed));
+	}
+
+	@Override
+	public boolean dispatchKeyEvent(KeyEvent e) {
+		if(e.getKeyCode()==KeyEvent.KEYCODE_CAMERA){
+			if(e.getAction()==KeyEvent.ACTION_UP){
+				KeyEventSender sender = new KeyEventSender();
+				sender.execute(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+				return true;
+			}else{
+				return true;
+			}
+		}
+
+		return super.dispatchKeyEvent(e);
+	}
+	
+	private class KeyEventSender extends AsyncTask<Integer, Object, Object> {
+		@Override
+		protected Object doInBackground(Integer... params) {
+			int keycode = (Integer)(params[0]);
+			Instrumentation ist = new Instrumentation();
+			ist.sendKeyDownUpSync(keycode);
+			return null;
+		}
 	}
 
 }
