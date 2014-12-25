@@ -106,7 +106,6 @@
                         android:layout_below="@+id/tableLayout1"
                         android:text="@string/authorization_required"
                         android:textColor="#FF0000" />
-
                 </RelativeLayout>
 
                 <LinearLayout
@@ -132,7 +131,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/share_music_file" />
-                    
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -174,6 +173,19 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:stretchColumns="0,1" >
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/playingSongHasChanged"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:text="@string/playing_song_has_changed"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:visibility="gone"
+                android:textColor="#FF0000" />
+        </TableRow>
 
         <TableRow>
 

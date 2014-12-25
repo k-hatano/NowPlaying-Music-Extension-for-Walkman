@@ -308,11 +308,11 @@ containing a value of this type.
         public static final int ic_launcher=0x7f02002f;
     }
     public static final class id {
-        public static final int action_cancel=0x7f09003f;
-        public static final int action_close=0x7f09003c;
-        public static final int action_ok=0x7f09003e;
-        public static final int action_reset_all_settings=0x7f09003d;
-        public static final int action_settings=0x7f09003b;
+        public static final int action_cancel=0x7f090040;
+        public static final int action_close=0x7f09003d;
+        public static final int action_ok=0x7f09003f;
+        public static final int action_reset_all_settings=0x7f09003e;
+        public static final int action_settings=0x7f09003c;
         public static final int album_artwork_file_path=0x7f090031;
         public static final int apply_template=0x7f090029;
         public static final int authorization_required=0x7f09002d;
@@ -320,7 +320,7 @@ containing a value of this type.
         public static final int box_count=0x7f090003;
         public static final int button=0x7f090004;
         public static final int center=0x7f090009;
-        public static final int close=0x7f090036;
+        public static final int close=0x7f090037;
         public static final int com_facebook_body_frame=0x7f09001e;
         public static final int com_facebook_button_xout=0x7f090020;
         public static final int com_facebook_login_activity_progress_bar=0x7f09000e;
@@ -346,7 +346,7 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_login_button=0x7f090025;
         public static final int com_facebook_usersettingsfragment_logo_image=0x7f090023;
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f090024;
-        public static final int container=0x7f090037;
+        public static final int container=0x7f090038;
         public static final int content=0x7f090028;
         public static final int destination=0x7f09002b;
         public static final int footer=0x7f090026;
@@ -356,12 +356,13 @@ containing a value of this type.
         public static final int left=0x7f09000a;
         public static final int music_file_path=0x7f09002f;
         public static final int normal=0x7f090001;
-        public static final int ok=0x7f090039;
+        public static final int ok=0x7f09003a;
         public static final int picker_subtitle=0x7f09001b;
-        public static final int reset_all_settings=0x7f090038;
+        public static final int playingSongHasChanged=0x7f090035;
+        public static final int reset_all_settings=0x7f090039;
         public static final int right=0x7f09000b;
         public static final int send=0x7f09002c;
-        public static final int settings=0x7f090035;
+        public static final int settings=0x7f090036;
         public static final int share_album_artwork_file=0x7f090032;
         public static final int share_music_file=0x7f090030;
         public static final int small=0x7f090002;
@@ -371,7 +372,7 @@ containing a value of this type.
         public static final int tab3=0x7f090033;
         public static final int tableLayout1=0x7f09002a;
         public static final int top=0x7f090008;
-        public static final int webView=0x7f09003a;
+        public static final int webView=0x7f09003b;
     }
     public static final class layout {
         public static final int com_facebook_friendpickerfragment=0x7f030000;
@@ -461,6 +462,7 @@ containing a value of this type.
         public static final int ok=0x7f06003d;
         public static final int on=0x7f06003b;
         public static final int other_app=0x7f060028;
+        public static final int playing_song_has_changed=0x7f060058;
         public static final int posting_cancelled=0x7f060057;
         public static final int posting_completed=0x7f060055;
         public static final int posting_failed=0x7f060056;

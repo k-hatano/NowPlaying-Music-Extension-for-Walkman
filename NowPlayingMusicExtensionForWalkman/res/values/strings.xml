@@ -66,4 +66,6 @@
     <string name="posting_failed">Posting failed</string>
     <string name="posting_cancelled">Posting cancelled</string>
     
+    <string name="playing_song_has_changed">Playing song has changed. Reopen NowPlaying Music Extension to update the song information.</string>
+    
 </resources>

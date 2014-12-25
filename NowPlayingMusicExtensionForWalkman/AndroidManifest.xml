@@ -61,6 +61,11 @@
                 <action android:name="com.sonyericsson.media.infinite.ACTION_GET_DETAILS" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".SongChangedReceiver" >
+            <intent-filter>
+                <action android:name="com.sonyericsson.music.playbackcontrol.ACTION_TRACK_STARTED"/>
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".SettingsActivity"
