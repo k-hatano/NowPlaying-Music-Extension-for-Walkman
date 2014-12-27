@@ -528,12 +528,19 @@ public class ExtensionActivity extends TabActivity implements OnClickListener, O
 			}).show();
 		}
 	}
+	
+	@Override
+	public void onPause(){
+		super.onPause();
+		SongChangedReceiver.enabled=false;
+	}
 
 	@Override
 	public void onResume(){
 		super.onResume();
 		updatePreferencesValues();
 		checkAuthorization();
+		SongChangedReceiver.enabled=true;
 	}
 
 	@Override
